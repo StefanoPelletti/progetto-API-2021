@@ -32,7 +32,7 @@ struct node *nullnode;
 void rightRotate(struct node *x) {
     struct node *y = x->left;
     x->left = y->right;
-    if (y->right != nullnode) {
+    if(y->right != nullnode) {
         y->right->parent = x;
     }
     y->parent = x->parent;
@@ -68,17 +68,17 @@ void leftRotate(struct node *x) {
 void fix(struct node *v) {
     struct node *u;
 
-    while (v->parent->color == 'r') {
-        if (v->parent == v->parent->parent->right) {
+    while(v->parent->color == 'r') {
+        if(v->parent == v->parent->parent->right) {
             u = v->parent->parent->left;
 
-            if (u->color == 'r') {
+            if(u->color == 'r') {
                 u->color = 'b';
                 v->parent->color = 'b';
                 v->parent->parent->color = 'r';
                 v = v->parent->parent;
             } else {
-                if (v == v->parent->left) {
+                if(v == v->parent->left) {
                     v = v->parent;
                     rightRotate(v);
                 }
@@ -89,13 +89,13 @@ void fix(struct node *v) {
         } else {
             u = v->parent->parent->right;
 
-            if (u->color == 'r') {
+            if(u->color == 'r') {
                 u->color = 'b';
                 v->parent->color = 'b';
                 v->parent->parent->color = 'r';
                 v = v->parent->parent;
             } else {
-                if (v == v->parent->right) {
+                if(v == v->parent->right) {
                     v = v->parent;
                     leftRotate(v);
                 }
@@ -105,16 +105,16 @@ void fix(struct node *v) {
             }
         }
 
-        if (v == root) {
+        if(v == root) {
             break;
         }
     }
     root->color = 'b';
 }
 
-struct node *insert(int _weight, int _id) {
+struct node* insert(int _weight, int _id) {
 
-    struct node *newNode = (struct node *) malloc(sizeof(struct node));
+    struct node *newNode = (struct node*) malloc(sizeof(struct node));
     newNode->weight = _weight;
     newNode->id = _id;
     newNode->parent = NULL;
@@ -128,7 +128,7 @@ struct node *insert(int _weight, int _id) {
 
     while (x != nullnode || x->weight == _weight) {
         y = x;
-        if (x->weight == _weight) {
+        if(x->weight == _weight) {
             break;
         }
         if (newNode->weight < x->weight) {
@@ -139,7 +139,7 @@ struct node *insert(int _weight, int _id) {
     }
     //x potrebbe essere nullnode (non c'è)
 
-    if (x == nullnode) {
+    if(x==nullnode) {
         newNode->parent = y;
         if (y == NULL) {
             root = newNode;
@@ -182,10 +182,10 @@ void initNullNode() {
 
 void fixDelete(struct node *x) {
     struct node *s;
-    while (x != root && x->color == 'b') {
-        if (x == x->parent->left) {
+    while(x != root && x->color == 'b') {
+        if(x == x->parent->left) {
             s = x->parent->right;
-            if (s->color == 'r') {
+            if(s->color == 'r') {
                 s->color = 'b';
                 x->parent->color = 'r';
                 leftRotate(x->parent);
@@ -196,7 +196,7 @@ void fixDelete(struct node *x) {
                 s->color = 'r';
                 x = x->parent;
             } else {
-                if (s->right->color == 'b') {
+                if(s->right->color == 'b') {
                     s->left->color = 'b';
                     s->color = 'r';
                     rightRotate(s);
@@ -239,14 +239,14 @@ void fixDelete(struct node *x) {
     x->color = 'b';
 }
 
-struct node *minimum(struct node *node) {
+struct node *minimum(struct node* node) {
     while (node->left != nullnode) {
         node = node->left;
     }
     return node;
 }
 
-struct node *maximum(struct node *node) {
+struct node *maximum(struct node* node) {
     while (node->right != nullnode) {
         node = node->right;
     }
@@ -254,9 +254,9 @@ struct node *maximum(struct node *node) {
 }
 
 void rbTransplant(struct node *a, struct node *b) {
-    if (a->parent == NULL) {
+    if(a->parent == NULL) {
         root = b;
-    } else if (a == a->parent->left) {
+    } else if( a == a->parent->left) {
         a->parent->left = b;
     } else {
         a->parent->right = b;
@@ -271,25 +271,25 @@ void deleteKey(int key) {
     struct node *x;
     struct node *y;
 
-    while (p != nullnode) {
-        if (p->weight == key) {
+    while(p != nullnode) {
+        if(p->weight == key) {
             z = p;
         }
 
-        if (p->weight <= key) {
+        if(p->weight <= key) {
             p = p->right;
         } else {
             p = p->left;
         }
     }
 
-    if (z == nullnode) {
+    if(z == nullnode) {
         printf("\nerror, no such node in tree");
     }
 
     y = z;
     char y_original_color = y->color;
-    if (z->left == nullnode) {
+    if(z->left == nullnode) {
         x = z->right;
         rbTransplant(z, z->right);
     } else if (z->right == nullnode) {
@@ -299,7 +299,7 @@ void deleteKey(int key) {
         y = minimum(z->right);
         y_original_color = y->color;
         x = y->right;
-        if (y->parent == z) {
+        if(y->parent == z) {
             x->parent = y;
         } else {
             rbTransplant(y, y->right);
@@ -313,23 +313,23 @@ void deleteKey(int key) {
         y->color = z->color;
     }
     free(z);
-    if (y_original_color == 'b') {
+    if(y_original_color == 'b') {
         fixDelete(x);
     }
 }
 
 //non usata nel progetto, ma utile per l'implementazione di un albero RB
-void deleteNode(struct node *z) {
+void deleteNode(struct node* z) {
     struct node *x;
     struct node *y;
 
-    if (z == nullnode) {
+    if(z == nullnode) {
         printf("\nerror, no such node in tree");
     }
 
     y = z;
     char y_original_color = y->color;
-    if (z->left == nullnode) {
+    if(z->left == nullnode) {
         x = z->right;
         rbTransplant(z, z->right);
     } else if (z->right == nullnode) {
@@ -339,7 +339,7 @@ void deleteNode(struct node *z) {
         y = minimum(z->right);
         y_original_color = y->color;
         x = y->right;
-        if (y->parent == z) {
+        if(y->parent == z) {
             x->parent = y;
         } else {
             rbTransplant(y, y->right);
@@ -353,7 +353,7 @@ void deleteNode(struct node *z) {
         y->color = z->color;
     }
     free(z);
-    if (y_original_color == 'b') {
+    if(y_original_color == 'b') {
         fixDelete(x);
     }
 }
@@ -365,7 +365,7 @@ int deleteMaxWeight() {
 
     z = maximum(root);
 
-    if (z->back != NULL) {
+    if(z->back != NULL) {
         struct node *pb = z->back;
         z->back = z->back->back;
         free(pb);
@@ -374,7 +374,7 @@ int deleteMaxWeight() {
 
     y = z;
     char y_original_color = y->color;
-    if (z->left == nullnode) {
+    if(z->left == nullnode) {
         x = z->right;
         rbTransplant(z, z->right);
     } else if (z->right == nullnode) {
@@ -384,7 +384,7 @@ int deleteMaxWeight() {
         y = minimum(z->right);
         y_original_color = y->color;
         x = y->right;
-        if (y->parent == z) {
+        if(y->parent == z) {
             x->parent = y;
         } else {
             rbTransplant(y, y->right);
@@ -398,7 +398,7 @@ int deleteMaxWeight() {
         y->color = z->color;
     }
     free(z);
-    if (y_original_color == 'b') {
+    if(y_original_color == 'b') {
         fixDelete(x);
     }
     return 0;
@@ -407,18 +407,19 @@ int deleteMaxWeight() {
 //END OF RB TREE implementation ----------------------------------------
 
 void print(struct node *p) {
-    if (p != nullnode) {
+    if(p != nullnode) {
 
         print(p->left);
 
-        if (p->back != NULL) {
+        if(p->back != NULL) {
             print(p->back);
         }
-        if (first == '1') {
-            printf("%d", p->id);
+        if(first == '1') {
+            printf("%d",p->id);
             first = '0';
-        } else {
-            printf(" %d", p->id);
+        }
+        else {
+            printf(" %d",p->id);
         }
         print(p->right);
     }
@@ -426,8 +427,8 @@ void print(struct node *p) {
 
 //DEBUG
 void insertInBucket(struct node *p, int *i, int bucket[]) {
-    if (p != nullnode) {
-        if (p->back != NULL) {
+    if(p!=nullnode) {
+        if(p->back != NULL) {
             insertInBucket(p->back, i, bucket);
         }
 
@@ -439,7 +440,8 @@ void insertInBucket(struct node *p, int *i, int bucket[]) {
 }
 
 //DEBUG
-void swap(int *xp, int *yp) {
+void swap(int *xp, int *yp)
+{
     int temp = *xp;
     *xp = *yp;
     *yp = temp;
@@ -448,22 +450,22 @@ void swap(int *xp, int *yp) {
 void printID() {
 #ifndef EVAL
 
-    int q = 0;
+    int q=0;
     int bucket[k];
     insertInBucket(root, &q, bucket);
 
     int i, j;
     int max = k;
     if (actualK < k) max = actualK;
-    for (i = 0; i < k - 1; i++)
-        for (j = 0; j < max - i - 1; j++)
-            if (bucket[j] > bucket[j + 1])
-                swap(&bucket[j], &bucket[j + 1]);
+    for (i = 0; i < k-1; i++)
+        for (j = 0; j < max-i-1; j++)
+            if (bucket[j] > bucket[j+1])
+                swap(&bucket[j], &bucket[j+1]);
 
-    if (actualK > 0)
-        printf("%d", bucket[0]);
-    for (int s = 1; s < max; s++)
-        printf(" %d", bucket[s]);
+    if(actualK>0)
+        printf("%d",bucket[0]);
+    for(int s = 1; s < max; s++)
+        printf(" %d",bucket[s]);
     printf("\n");
 
 #endif
@@ -480,8 +482,8 @@ int minimumDistance(long int distance[], char pSet[]) {
     int min = MAX_LONG_INT;
     int min_index = -1;
 
-    for (int v = 0; v < d; v++) {
-        if (pSet[v] == '0' && distance[v] <= min) {
+    for(int v=0; v<d; v++ ) {
+        if(pSet[v] == '0' && distance[v] <= min) {
             min = distance[v];
             min_index = v;
         }
@@ -493,7 +495,7 @@ int applyDijkstra(int graph[d][d]) {
     long int distance[d];
     char pSet[d];
 
-    for (int i = 0; i < d; i++) {
+    for(int i=0; i<d; i++) {
         pSet[i] = '0';
         distance[i] = MAX_LONG_INT;
     }
@@ -501,21 +503,20 @@ int applyDijkstra(int graph[d][d]) {
     distance[0] = 0;
 
     int u;
-    for (int c = 0; c < d - 1; c++) {
+    for(int c=0; c<d-1;c++) {
         u = minimumDistance(distance, pSet);
         pSet[u] = '1';
 
-        for (int v = 0; v < d; v++) {
-            if ((pSet[v] == '0') && (graph[u][v] != 0) && (distance[u] != MAX_LONG_INT) &&
-                (distance[u] + graph[u][v] < distance[v])) {
+        for(int v=0; v<d; v++) {
+            if((pSet[v]=='0') && (graph[u][v] != 0) && (distance[u]!=MAX_LONG_INT) && (distance[u] + graph[u][v] < distance[v])) {
                 distance[v] = distance[u] + graph[u][v];
             }
         }
     }
 
     int result = 0;
-    for (int i = 0; i < d; i++)
-        if (distance[i] != MAX_LONG_INT)
+    for(int i=0; i<d; i++)
+        if(distance[i] != MAX_LONG_INT)
             result += distance[i];
     return result;
 }
@@ -527,7 +528,7 @@ int main() {
     full = '0';
     maxweight = -1;
 
-    if (2 != scanf("%d %d", &d, &k)) return -1;
+    if( 2 != scanf("%d %d",&d,&k)) return -1;
 
 
     int j;
@@ -536,32 +537,32 @@ int main() {
 
 
     int val;
-    int result;
     char *pt;
     char input[STRLEN];
     char command[CMDLEN];
 
-    while (1) {
-        if (NULL == fgets(command, CMDLEN, stdin)) return 0;
+    while(1) {
+        if( NULL == fgets(command,CMDLEN, stdin)) return 0;
 
-        if (command[0] == 'A') {
+        if( command[0] == 'A' ) {
             //ROUTINE graph
-            for (int i = 0; i < d; i++) {
-                pt = fgets(input, STRLEN, stdin);
-                j = 0;
+            for(int i=0; i<d; i++) {
+                pt = fgets(input,STRLEN,stdin);
+                j=0;
                 pt--;
-                val = 0;
+                val=0;
 
                 do {
                     pt++;
-                    if ((*pt) == '\n' || (*pt) == ',') {
+                    if((*pt)=='\n' || (*pt)==',') {
                         graph[i][j] = val;
-                        val = 0;
+                        val=0;
                         j++;
-                    } else {
-                        val = val * 10 + ((*pt) - '0');
                     }
-                } while ((*pt) != '\n');
+                    else {
+                        val = val*10 + ( (*pt) - '0');
+                    }
+                } while((*pt)!='\n');
             }
 
             weight = applyDijkstra(graph);
@@ -569,17 +570,19 @@ int main() {
             // se non è piena la classifica aggiungi il nodo-id tranquillamente
             // dopo averlo aggiunto, vedi se la classifica è piena
             // magari potrebbe essere aumentato il peso massimo,
-            if (full == '0') {
+            if(full == '0') {
                 insert(weight, actualK);
                 actualK++;
-                if (weight > maxweight)
+                if(weight > maxweight)
                     maxweight = weight;
-                if (actualK == k)
+                if(actualK == k)
                     full = '1';
             } else { //if(full == '1')
-                if (weight <
-                    maxweight) { //se la classifica è piena e il grafo è pesante di più o uguale, non aggiungerlo
-                    result = deleteMaxWeight(); // se result è uno, non cambiare maxweight. Se result è 0, devi trovare il nuovo maxweight
+                if(weight >= maxweight) { //se la classifica è piena e il grafo è pesante di più o uguale, non aggiungerlo
+                    //do not add
+                }
+                else {
+                    int result = deleteMaxWeight(); // se result è uno, non cambiare maxweight. Se result è 0, devi trovare il nuovo maxweight
                     insert(weight, actualK);
                     if (result == 0) {
                         maxweight = (maximum(root))->weight;
@@ -588,7 +591,7 @@ int main() {
                 actualK++;
             }
 
-        } else if (command[0] == 'T') {
+        } else if( command[0] == 'T' ) {
             printID();
         }
     }
